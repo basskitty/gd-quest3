@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
     private Vector3 characterGravity;
     private Vector3 platformVelocity;
     private bool isOnPlatform;
+    private bool jumpQueued;
     void Start()
     {
         this.controller = this.GetComponent<CharacterController>();
@@ -32,26 +33,57 @@ public class Character : MonoBehaviour
         this.jumpAction = InputSystem.actions.FindAction("Jump");
         this.jumpCooldownTimer = 0.0f;
     }
-    
+
+    void Update()
+    {
+        if (this.jumpAction != null && this.jumpAction.WasPressedThisFrame())
+        {
+            this.jumpQueued = true;
+        }
+    }
+
     void HandleJumping()
     {
-        if (this.controller.isGrounded && this.isJumping && this.jumpCooldownTimer <= 0.0f) {
-            this.jumpVelocity = Vector3.zero;
+        if (this.jumpCooldownTimer > 0.0f)
+        {
+            this.jumpCooldownTimer -= Time.fixedDeltaTime;
+            if (this.jumpCooldownTimer < 0.0f)
+            {
+                this.jumpCooldownTimer = 0.0f;
+            }
+        }
+
+        if (this.controller.isGrounded)
+        {
             this.isJumping = false;
+            this.characterGravity.y = 0.0f;
+
+            if (this.jumpQueued && this.jumpCooldownTimer <= 0.0f)
+            {
+                this.jumpVelocity = Vector3.zero;
+                this.jumpVelocity.y = this.jumpSpeed;
+                this.jumpCooldownTimer = this.jumpCooldown;
+                this.isJumping = true;
+                this.jumpQueued = false;
+            }
         }
-        if(this.controller.isGrounded && !this.isJumping && this.jumpAction.WasPressedThisFrame()) {
-            this.characterGravity = Vector3.zero;
+        else
+        {
+            this.jumpQueued = false;
+        }
+
+        if (this.jumpVelocity.y > 0.0f)
+        {
+            this.jumpVelocity.y += this.gravity * Time.fixedDeltaTime;
+            if (this.jumpVelocity.y < 0.0f)
+            {
+                this.jumpVelocity.y = 0.0f;
+            }
+        }
+        else
+        {
             this.jumpVelocity = Vector3.zero;
-            this.jumpVelocity.y = this.jumpSpeed;
-            this.jumpCooldownTimer = this.jumpCooldown;
-            this.isJumping = true;
         }
-        if(this.jumpVelocity.y > 0.0f) {
-            this.jumpVelocity.y -= Time.fixedDeltaTime;
-        } else {
-            this.jumpVelocity = Vector3.zero;
-        }
-        this.jumpCooldownTimer -= Time.fixedDeltaTime;
     }
 
     void FixedUpdate()
@@ -64,7 +96,7 @@ public class Character : MonoBehaviour
         inputForwardDirection.y = 0.0f;
         inputRightDirection.Normalize();
         inputForwardDirection.Normalize();
-//Since we do not use the physics system, we have to simulate gravity ourselves
+        //Since we do not use the physics system, we have to simulate gravity ourselves
         if(this.controller.isGrounded) {
             this.characterGravity.y = 0.0f;
         }
@@ -72,14 +104,14 @@ public class Character : MonoBehaviour
         this.characterMovement += this.characterGravity * Time.fixedDeltaTime;
         this.characterMovement += this.jumpVelocity * Time.fixedDeltaTime;
         this.characterMovement += inputRightDirection * inputMovement.x * this.characterSpeed * Time.fixedDeltaTime;
-        this.characterMovement += inputForwardDirection * inputMovement.y * this.characterSpeed * Time. fixedDeltaTime;
+        this.characterMovement += inputForwardDirection * inputMovement.y * this.characterSpeed * Time.fixedDeltaTime;
         this.characterMovement *= (1 - this.dampening);
         Vector3 characterForward = this.characterMovement;
         characterForward.y = 0.0f;
         if (characterForward.sqrMagnitude > 0.0f && characterForward != Vector3.zero) {
             this.transform.forward = characterForward.normalized;
         }
-        
+    
         GetPlatformVelocity();
         var combinedMovement = this.characterMovement + this.platformVelocity * Time.fixedDeltaTime;
         this.controller.Move(combinedMovement);

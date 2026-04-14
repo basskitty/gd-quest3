@@ -74,7 +74,7 @@ public class Lever : MonoBehaviour
     }
     
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (playerInRange && this.interactAction.WasPressedThisFrame())
         {

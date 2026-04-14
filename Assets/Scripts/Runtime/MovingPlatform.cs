@@ -15,19 +15,14 @@ public class MovingPlatform : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Calculate ping-pong value for smooth back-and-forth movement
-        float pingPong = Mathf.PingPong(Time.fixedTime * platformSpeed, 1.0f);
+        float pingPong = Mathf.PingPong(Time.fixedTime * this.platformSpeed, 1.0f);
 
-        // Calculate new position using Lerp
-        Vector3 newPosition = Vector3.Lerp(start, end, pingPong);
+        var newPosition = Vector3.Lerp(start, end, pingPong);
 
-        // Update platform position
-        transform.localPosition = newPosition;
+        this.transform.localPosition = newPosition;
 
-        // Calculate velocity: (current position - last position) / fixedDeltaTime
         PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
 
-        // Update lastPosition for next frame
         lastPosition = newPosition;
     }
 }
