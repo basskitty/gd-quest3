@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Character : MonoBehaviour
 {
+    private Animator animator;
     private bool isJumping = false;
     private float jumpCooldownTimer;
     private CharacterController controller;
@@ -26,12 +27,19 @@ public class Character : MonoBehaviour
     private Vector3 platformVelocity;
     private bool isOnPlatform;
     private bool jumpQueued;
+    
+    public AudioSource audioSource;
+    public AudioSource audioSourceOneShot;
+    public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip stepSound;
     void Start()
     {
         this.controller = this.GetComponent<CharacterController>();
         this.moveAction = InputSystem.actions.FindAction("Move");
         this.jumpAction = InputSystem.actions.FindAction("Jump");
         this.jumpCooldownTimer = 0.0f;
+        this.animator = this.GetComponent<Animator>();
     }
 
     void Update()
@@ -41,49 +49,73 @@ public class Character : MonoBehaviour
             this.jumpQueued = true;
         }
     }
+    
+    void HandleFootsteps(Vector3 inputMovement)
+    {
+        bool isMoving = this.controller.isGrounded && inputMovement != Vector3.zero;
+
+        if (isMoving)
+        {
+            if (!this.audioSource.isPlaying)
+            {
+                this.audioSource.clip = this.stepSound;
+                this.audioSource.loop = true;
+                this.audioSource.Play();
+            }
+        }
+        else
+        {
+            if (this.audioSource.isPlaying)
+                this.audioSource.Stop();
+        }
+    }
 
     void HandleJumping()
     {
-        if (this.jumpCooldownTimer > 0.0f)
-        {
-            this.jumpCooldownTimer -= Time.fixedDeltaTime;
-            if (this.jumpCooldownTimer < 0.0f)
-            {
-                this.jumpCooldownTimer = 0.0f;
-            }
-        }
+        this.jumpCooldownTimer = Mathf.Max(0.0f, this.jumpCooldownTimer - Time.fixedDeltaTime);
 
         if (this.controller.isGrounded)
         {
+            if (this.isJumping) // was in the air last frame, now grounded
+                this.audioSourceOneShot.PlayOneShot(this.landSound);
+            
             this.isJumping = false;
             this.characterGravity.y = 0.0f;
 
             if (this.jumpQueued && this.jumpCooldownTimer <= 0.0f)
             {
-                this.jumpVelocity = Vector3.zero;
-                this.jumpVelocity.y = this.jumpSpeed;
+                this.jumpVelocity = new Vector3(0.0f, this.jumpSpeed, 0.0f);
                 this.jumpCooldownTimer = this.jumpCooldown;
                 this.isJumping = true;
                 this.jumpQueued = false;
+                
+                this.audioSourceOneShot.PlayOneShot(this.jumpSound);
             }
         }
         else
         {
             this.jumpQueued = false;
         }
-
+        
         if (this.jumpVelocity.y > 0.0f)
         {
-            this.jumpVelocity.y += this.gravity * Time.fixedDeltaTime;
-            if (this.jumpVelocity.y < 0.0f)
-            {
-                this.jumpVelocity.y = 0.0f;
-            }
+            this.jumpVelocity.y = Mathf.Max(0.0f, this.jumpVelocity.y + this.gravity * Time.fixedDeltaTime);
         }
         else
         {
             this.jumpVelocity = Vector3.zero;
         }
+    }
+    
+    void SetAnimationState() {
+        this.animator.SetBool("IsJumping", this.isJumping);
+        
+    }
+    
+    void SetAnimationState(Vector2 inputMovement) {
+        this.animator.SetBool("IsJumping", this.isJumping);
+        this.animator.SetBool("IsRunning", inputMovement != Vector2.zero);
+        this.animator.SetFloat("MovementForward", inputMovement.magnitude);
     }
 
     void FixedUpdate()
@@ -115,6 +147,9 @@ public class Character : MonoBehaviour
         GetPlatformVelocity();
         var combinedMovement = this.characterMovement + this.platformVelocity * Time.fixedDeltaTime;
         this.controller.Move(combinedMovement);
+        this.HandleFootsteps(inputMovement);
+        this.SetAnimationState();
+        this.SetAnimationState(inputMovement);
     }
     
     private void GetPlatformVelocity()
@@ -139,6 +174,19 @@ public class Character : MonoBehaviour
             platformVelocity = Vector3.zero;
             isOnPlatform = false;
         }
+    }
+    
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (!hit.collider.CompareTag("Enemy")) return;
+
+        // Check player is coming from above
+        bool stompedFromAbove = hit.normal.y > 0.7f;
+        if (!stompedFromAbove) return;
+
+        Enemy enemy = hit.collider.GetComponent<Enemy>();
+        if (enemy != null)
+            enemy.Stomp();
     }
     
     
