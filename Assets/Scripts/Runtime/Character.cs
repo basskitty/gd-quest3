@@ -27,6 +27,8 @@ public class Character : MonoBehaviour
     private Vector3 platformVelocity;
     private bool isOnPlatform;
     private bool jumpQueued;
+    [SerializeField] private float maxHealth = 100.0f;
+    private float currentHealth;
     
     public AudioSource audioSource;
     public AudioSource audioSourceOneShot;
@@ -40,6 +42,7 @@ public class Character : MonoBehaviour
         this.jumpAction = InputSystem.actions.FindAction("Jump");
         this.jumpCooldownTimer = 0.0f;
         this.animator = this.GetComponent<Animator>();
+        this .currentHealth = this .maxHealth;
     }
 
     void Update()
@@ -189,5 +192,12 @@ public class Character : MonoBehaviour
             enemy.Stomp();
     }
     
+    public float GetCurrentHealth() => this.currentHealth ;
+    public float GetMaxHealth() => this.maxHealth ;
+    
+    public void InflictDamage( float amount ) {
+        this.currentHealth -= amount ;
+        this.currentHealth = Mathf.Clamp( this.currentHealth, 0.0f, this.maxHealth);
+    }
     
 }

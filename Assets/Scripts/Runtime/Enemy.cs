@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private Vector3 startPosition;
     [SerializeField]
-    private int moveDirection = 1;
     private bool isDead = false;
     [SerializeField]
     private CapsuleCollider col;
