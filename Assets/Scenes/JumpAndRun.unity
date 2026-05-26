@@ -602,9 +602,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4026577292249022993, guid: 89e1bc162b405e147ac705e846aed70a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1361348562}
-    - targetCorrespondingSourceObject: {fileID: 4026577292249022993, guid: 89e1bc162b405e147ac705e846aed70a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1361348564}
   m_SourcePrefab: {fileID: 100100000, guid: 89e1bc162b405e147ac705e846aed70a, type: 3}
 --- !u!1001 &176189917
 PrefabInstance:
@@ -6134,6 +6131,7 @@ MonoBehaviour:
   hudCanvasGroup: {fileID: 819693659}
   gameOverCanvasGroup: {fileID: 837993702}
   fadingTime: 2
+  respawnTrigger: {fileID: 572916713}
 --- !u!224 &343671531
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7748,25 +7746,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 572916713}
-        m_TargetAssemblyTypeName: RespawnTrigger, Assembly-CSharp
+      - m_Target: {fileID: 343671530}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: Respawn
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1361348558}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.CharacterController, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RespawnTrigger, Assembly-CSharp
-        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -14739,7 +14725,6 @@ MonoBehaviour:
   dampening: 0.1
   cameraTransform: {fileID: 951829846}
   maxHealth: 100
-  CharacterRb: {fileID: 1361348564}
   audioSource: {fileID: 1361348561}
   audioSourceOneShot: {fileID: 1361348562}
   jumpSound: {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
@@ -14964,33 +14949,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!54 &1361348564
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361348554}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1452066695
 GameObject:
   m_ObjectHideFlags: 0
@@ -15971,7 +15929,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872042835}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29ee4784982531942b9d4d12742bd1ea, type: 3}
   m_Name: 
@@ -15982,6 +15940,7 @@ MonoBehaviour:
   hudCanvasGroup: {fileID: 0}
   gameOverCanvasGroup: {fileID: 0}
   fadingTime: 2
+  respawnTrigger: {fileID: 0}
 --- !u!222 &1872042838
 CanvasRenderer:
   m_ObjectHideFlags: 0
