@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameOverCanvasGroup;
     [SerializeField] private float fadingTime = 2.0f;
     private bool isFadingInGameOver = false ;
+    [SerializeField] private RespawnTrigger respawnTrigger;
     
     private IEnumerator FadeInGameOver() {
         this.isFadingInGameOver = true ;
@@ -27,6 +28,22 @@ public class UIManager : MonoBehaviour
         }
         this.hudCanvasGroup.alpha = 0.0f;
         this.gameOverCanvasGroup.alpha = 1.0f;
+    }
+    
+    private IEnumerator FadeInHUD()
+    {
+        float timer = 0.0f;
+        while (timer < this.fadingTime)
+        {
+            float percent = timer / this.fadingTime;
+            this.gameOverCanvasGroup.alpha = 1.0f - percent;
+            this.hudCanvasGroup.alpha = percent;
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        this.hudCanvasGroup.alpha = 1.0f;
+        this.gameOverCanvasGroup.alpha = 0.0f;
+        this.isFadingInGameOver = false;
     }
 
     private static UIManager instance = null;
@@ -59,6 +76,27 @@ public class UIManager : MonoBehaviour
         if (percent <= 0.0f && ! this.isFadingInGameOver) {
             this.StartCoroutine( this.FadeInGameOver());
         }
+    }
+    
+    public void Respawn()
+    {
+        // Reset stats
+        this.statistics.coinCounter = 0;
+        this.coinCounterText.text = $" {this.statistics.coinCounter} ";
+
+        // Restore health
+        this.character.RestoreHealth();
+
+        // Reposition player
+        this.respawnTrigger.Respawn(this.character.GetComponent<CharacterController>());
+
+        // Fade HUD back in
+        this.StartCoroutine(this.FadeInHUD());
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
 }

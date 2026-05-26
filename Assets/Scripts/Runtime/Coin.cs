@@ -25,6 +25,7 @@ public class Coin : MonoBehaviour
             source.clip = collectSound;
             source.outputAudioMixerGroup = sfxMixerGroup;
             source.Play();
+            UIManager .Instance.CollectCoin();
             Destroy(go, collectSound.length);
         }
 

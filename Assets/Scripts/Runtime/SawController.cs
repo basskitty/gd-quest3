@@ -14,6 +14,9 @@ public class SawController : MonoBehaviour
 
     [Header("Particles")]
     [SerializeField] private ParticleSystem sparklingParticles;
+    
+    [Header("Damage")]
+    [SerializeField] private float damagePerSecond = 10f;
 
     private AudioSource audioSource;
 
@@ -76,6 +79,15 @@ public class SawController : MonoBehaviour
             sparklingParticles.Stop();
         }
     }
+    
+    //OnTriggerStay() is called every physics update - we use Time.fixedDeltaTime!
+    private void OnTriggerStay ( Collider other) {
+        if (other.CompareTag( "Player" )) {
+            var character = other.GetComponentInChildren< Character >();
+            character.InflictDamage( this.damagePerSecond * Time .fixedDeltaTime);
+        }
+    }
+
 
     private void Update()
     {

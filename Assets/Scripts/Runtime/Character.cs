@@ -29,7 +29,7 @@ public class Character : MonoBehaviour
     private bool jumpQueued;
     [SerializeField] private float maxHealth = 100.0f;
     private float currentHealth;
-    
+
     public AudioSource audioSource;
     public AudioSource audioSourceOneShot;
     public AudioClip jumpSound;
@@ -123,6 +123,8 @@ public class Character : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (this.currentHealth <= 0)
+            return; // stop all movement logic below
         this.HandleJumping();
         var inputMovement = this.moveAction.ReadValue<Vector2>();
         var inputRightDirection = this.cameraTransform.right;
@@ -132,6 +134,7 @@ public class Character : MonoBehaviour
         inputRightDirection.Normalize();
         inputForwardDirection.Normalize();
         //Since we do not use the physics system, we have to simulate gravity ourselves
+        
         if(this.controller.isGrounded) {
             this.characterGravity.y = 0.0f;
         }
@@ -199,5 +202,9 @@ public class Character : MonoBehaviour
         this.currentHealth -= amount ;
         this.currentHealth = Mathf.Clamp( this.currentHealth, 0.0f, this.maxHealth);
     }
-    
+
+    public void RestoreHealth()
+    {
+        this.currentHealth = this.maxHealth;
+    }
 }
