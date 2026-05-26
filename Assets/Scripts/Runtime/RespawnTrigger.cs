@@ -6,14 +6,13 @@ public class RespawnTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        CharacterController characterController = other.GetComponent<CharacterController>();
-        if (characterController != null)
+        if (other.TryGetComponent<Character>(out Character character))
         {
-            Respawn(characterController);
+            character.InflictDamage(character.GetMaxHealth()); // kill the player
         }
     }
 
-    void Respawn(CharacterController characterController)
+    public void Respawn(CharacterController characterController)
     {
         characterController.enabled = false;
         characterController.transform.position = respawnPoint.position;
