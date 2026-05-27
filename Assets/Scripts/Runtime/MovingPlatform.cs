@@ -1,16 +1,28 @@
+using System;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField] private float platformSpeed = 1.0f;
-    [SerializeField] private Vector3 start = Vector3.zero;
-    [SerializeField] private Vector3 end = Vector3.one;
+    public float platformSpeed = 1.0f;
+    public Vector3 start = Vector3.zero;
+    public Vector3 end = Vector3.one;
+    [NonSerialized]
+    public float editorPlatformPercent;
+    
     private Vector3 lastPosition;
     public Vector3 PlatformVelocity { get; private set; }
 
     void Start()
     {
         lastPosition = transform.localPosition;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.purple;
+        var mf = this.GetComponent<MeshFilter>();
+        var pos = Vector3.Lerp(start, end, editorPlatformPercent);
+        Gizmos.DrawWireMesh( mf.sharedMesh, pos);
     }
 
     void FixedUpdate()

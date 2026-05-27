@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Profiling;
+
 public class Character : MonoBehaviour
 {
     private Animator animator;
@@ -29,6 +31,7 @@ public class Character : MonoBehaviour
     private bool jumpQueued;
     [SerializeField] private float maxHealth = 100.0f;
     private float currentHealth;
+    [SerializeField] private float platformRayDistance;
 
     public AudioSource audioSource;
     public AudioSource audioSourceOneShot;
@@ -125,7 +128,9 @@ public class Character : MonoBehaviour
     {
         if (this.currentHealth <= 0)
             return; // stop all movement logic below
+        Profiler.BeginSample("HandleJumping");
         this.HandleJumping();
+        Profiler.EndSample();
         var inputMovement = this.moveAction.ReadValue<Vector2>();
         var inputRightDirection = this.cameraTransform.right;
         var inputForwardDirection = this.cameraTransform.forward;
@@ -156,6 +161,8 @@ public class Character : MonoBehaviour
         this.HandleFootsteps(inputMovement);
         this.SetAnimationState();
         this.SetAnimationState(inputMovement);
+
+       
     }
     
     private void GetPlatformVelocity()
@@ -193,6 +200,14 @@ public class Character : MonoBehaviour
         Enemy enemy = hit.collider.GetComponent<Enemy>();
         if (enemy != null)
             enemy.Stomp();
+    }
+
+    private void OnDrawGizmos ()
+    {
+        var rayStart = this.transform.position;
+        var rayEnd = this.transform.position + Vector3 .down * this .platformRayDistance;
+        Gizmos .color = Color .red;
+        Gizmos .DrawLine(rayStart, rayEnd);
     }
     
     public float GetCurrentHealth() => this.currentHealth ;
