@@ -32,7 +32,6 @@ public class Character : MonoBehaviour
     [SerializeField] private float maxHealth = 100.0f;
     private float currentHealth;
     [SerializeField] private float platformRayDistance;
-    public bool hasWon;
 
     public AudioSource audioSource;
     public AudioSource audioSourceOneShot;
@@ -47,7 +46,6 @@ public class Character : MonoBehaviour
         this.jumpCooldownTimer = 0.0f;
         this.animator = this.GetComponent<Animator>();
         this.currentHealth = this.maxHealth;
-        this.hasWon = false;
     }
 
     void Update()
