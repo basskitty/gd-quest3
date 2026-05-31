@@ -19,7 +19,17 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 72761729024
-    m_Localized: Hey! Hast du schon zu Mittag gegessen?
+    m_Localized: Ich war auch einmal Abenteurer wie du, bis ich einen Pfeil ins Knie
+      bekam.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229410382258176
+    m_Localized: "Ein Zauberer kommt nie zu sp\xE4t, ebenso wenig zu fr\xFCh. Er
+      trifft genau dann ein, wann er es beabsichtigt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229407177809920
+    m_Localized: Alle deine Basen..sind zu uns?
     m_Metadata:
       m_Items: []
   references:

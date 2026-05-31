@@ -19,7 +19,17 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 72761729024
-    m_Localized: Hey! Don't take an arrow to your knee!
+    m_Localized: I used to be an adventurer like you. Then I took an arrow in the
+      knee.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229410382258176
+    m_Localized: A wizard is never late, nor is he early. He arrives precisely when
+      he means to.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229407177809920
+    m_Localized: All your base are belong to us!
     m_Metadata:
       m_Items: []
   references:

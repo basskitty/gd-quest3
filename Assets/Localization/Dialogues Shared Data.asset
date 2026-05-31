@@ -16,7 +16,15 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 9396f35a5b4b3b6499bc29d8b80a8b9d
   m_Entries:
   - m_Id: 72761729024
-    m_Key: SignDialog
+    m_Key: SignDialogArrow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229407177809920
+    m_Key: SignDialogBase
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8229410382258176
+    m_Key: SignDialogWizard
     m_Metadata:
       m_Items: []
   m_Metadata:

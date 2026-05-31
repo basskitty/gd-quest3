@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="Background" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/KenneyRPGUI/PNG/buttonLong_brown.png?fileID=2800000&amp;guid=e1b37c399f270ee40b1efce762deb577&amp;type=3#buttonLong_brown&quot;); background-size: 100% 100%; min-height: 0%; max-height: 20%; top: 80%; bottom: auto;">
-        <ui:Label text="Hey! Don&apos;t take an arrow to your knee!&#10;" style="height: auto; top: 15%; bottom: 15%; flex-grow: 1; min-height: 5%; max-height: 75%; font-size: 60px; color: rgb(255, 255, 255); white-space: normal; min-width: 10%; max-width: 90%; left: 5%; -unity-font-style: bold; -unity-text-align: upper-center;"/>
+        <ui:Label text="" data-source="project://database/Assets/Localization/Localization%20Settings.asset?fileID=11400000&amp;guid=be041754e10b3ec4f96660f67349ae49&amp;type=2#Localization Settings" style="height: auto; top: 15%; bottom: 15%; flex-grow: 1; min-height: 5%; max-height: 75%; font-size: 50px; color: rgb(255, 255, 255); white-space: normal; min-width: 10%; max-width: 90%; left: 5%; -unity-font-style: bold; -unity-text-align: upper-center;"/>
     </ui:VisualElement>
 </ui:UXML>
