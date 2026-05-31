@@ -32,6 +32,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float maxHealth = 100.0f;
     private float currentHealth;
     [SerializeField] private float platformRayDistance;
+    public bool hasWon;
 
     public AudioSource audioSource;
     public AudioSource audioSourceOneShot;
@@ -45,7 +46,8 @@ public class Character : MonoBehaviour
         this.jumpAction = InputSystem.actions.FindAction("Jump");
         this.jumpCooldownTimer = 0.0f;
         this.animator = this.GetComponent<Animator>();
-        this .currentHealth = this .maxHealth;
+        this.currentHealth = this.maxHealth;
+        this.hasWon = false;
     }
 
     void Update()
@@ -126,7 +128,7 @@ public class Character : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (this.currentHealth <= 0)
+        if (this.currentHealth <= 0 || UIManager.HasWon)
             return; // stop all movement logic below
         Profiler.BeginSample("HandleJumping");
         this.HandleJumping();

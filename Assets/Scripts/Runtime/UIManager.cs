@@ -15,6 +15,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float fadingTime = 2.0f;
     private bool isFadingInGameOver = false ;
     [SerializeField] private RespawnTrigger respawnTrigger;
+    [SerializeField] private CanvasGroup victoryCanvasGroup;
+    
+    private bool hasWon = false;
+    public static bool HasWon => instance != null && instance.hasWon;
     
     private IEnumerator FadeInGameOver() {
         this.isFadingInGameOver = true ;
@@ -43,7 +47,21 @@ public class UIManager : MonoBehaviour
         }
         this.hudCanvasGroup.alpha = 1.0f;
         this.gameOverCanvasGroup.alpha = 0.0f;
-        this.isFadingInGameOver = false;
+    }
+    
+    private IEnumerator FadeInVictory()
+    {
+        float timer = 0.0f;
+        while (timer < this.fadingTime)
+        {
+            float percent = timer / this.fadingTime;
+            this.hudCanvasGroup.alpha = 1.0f - percent;
+            this.victoryCanvasGroup.alpha = percent;
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        this.hudCanvasGroup.alpha = 0.0f;
+        this.victoryCanvasGroup.alpha = 1.0f;
     }
 
     private static UIManager instance = null;
@@ -60,6 +78,7 @@ public class UIManager : MonoBehaviour
     {
         instance = this;
         this.statistics = new PlayerStatistics() { coinCounter = 0 };
+        this.hasWon = false;
     }
 
     public void CollectCoin()
@@ -97,6 +116,12 @@ public class UIManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    
+    public void TriggerVictory()
+    {
+        this.hasWon = true;
+        this.StartCoroutine(this.FadeInVictory());
     }
 
 }
