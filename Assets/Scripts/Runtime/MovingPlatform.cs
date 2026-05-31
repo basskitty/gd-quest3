@@ -30,11 +30,8 @@ public class MovingPlatform : MonoBehaviour
         float pingPong = Mathf.PingPong(Time.fixedTime * this.platformSpeed, 1.0f);
 
         var newPosition = Vector3.Lerp(start, end, pingPong);
-        
-        Debug.Log($"pingPong: {pingPong}, newPosition: {newPosition}, localPosition: {transform.localPosition}");
 
-      //  this.transform.localPosition = newPosition;
-        this.transform.position = newPosition;
+        this.transform.localPosition = newPosition;
 
         PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
 

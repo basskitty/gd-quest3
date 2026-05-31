@@ -1,40 +1,36 @@
-using System;
+using UnityEditor;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour
+[ CustomEditor ( typeof ( MovingPlatform ))]
+public class MovingPlatformEditor : Editor
 {
-    public float platformSpeed = 1.0f;
-    public Vector3 start = Vector3.zero;
-    public Vector3 end = Vector3.one;
-    [NonSerialized]
-    public float editorPlatformPercent;
+    private SerializedProperty start;
+    private SerializedProperty end;
+    private MovingPlatform platform;
+
+    private void OnEnable () {
+        this.platform = this.target as MovingPlatform;
+        //     this.start = this.serializedObject.FindProperty( "start" );
+        //   this.end = this.serializedObject.FindProperty( "end" );
+    }
     
-    private Vector3 lastPosition;
-    public Vector3 PlatformVelocity { get; private set; }
-
-    void Start()
+    public override void OnInspectorGUI()
     {
-        lastPosition = transform.localPosition;
+        //base.OnInspectorGUI();
+        this.platform.platformSpeed = EditorGUILayout.Slider("Speed", this.platform.platformSpeed, 0.0f, 10.0f);
+
+        GUILayout.Label("Debug");
+        this.platform.editorPlatformPercent = EditorGUILayout.Slider(this.platform.editorPlatformPercent, 0.0f, 1.0f);
+    }
+    
+    private void OnSceneGUI ()
+    {
+        Handles.color = Color.green;
+        Handles.DrawLine( this.platform.start, this.platform.end);
+        
+        this.platform.start = Handles.PositionHandle( this.platform.start, Quaternion.identity);
+        this.platform.end = Handles.PositionHandle( this.platform.end, Quaternion.identity);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.purple;
-        var mf = this.GetComponent<MeshFilter>();
-        var pos = Vector3.Lerp(start, end, editorPlatformPercent);
-        Gizmos.DrawWireMesh( mf.sharedMesh, pos);
-    }
 
-    void FixedUpdate()
-    {
-        float pingPong = Mathf.PingPong(Time.fixedTime * this.platformSpeed, 1.0f);
-
-        var newPosition = Vector3.Lerp(start, end, pingPong);
-
-        this.transform.localPosition = newPosition;
-
-        PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
-
-        lastPosition = newPosition;
-    }
 }

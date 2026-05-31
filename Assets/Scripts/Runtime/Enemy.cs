@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     private bool isDead = false;
     [SerializeField]
     private CapsuleCollider col;
+    [SerializeField] private float damagePerSecond = 20f;
 
     void Start()
     {
@@ -63,5 +64,12 @@ public class Enemy : MonoBehaviour
         squash.AppendInterval(0.2f);                           // hold for a moment
         squash.Append(this.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
         squash.OnComplete(() => Destroy(this.gameObject));
+    }
+    
+    private void OnTriggerStay ( Collider other) {
+        if (other.CompareTag( "Player" )) {
+            var character = other.GetComponentInChildren< Character >();
+            character.InflictDamage( this.damagePerSecond * Time .fixedDeltaTime);
+        }
     }
 }
