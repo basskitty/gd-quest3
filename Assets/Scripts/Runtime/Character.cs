@@ -168,7 +168,7 @@ public class Character : MonoBehaviour
     private void GetPlatformVelocity()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f, LayerMask.GetMask("Platforms")))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, platformRayDistance, LayerMask.GetMask("Platforms")))
         {
             MovingPlatform platform = hit.collider.GetComponent<MovingPlatform>();
             if (platform != null && !this.jumpAction.WasPressedThisFrame())
