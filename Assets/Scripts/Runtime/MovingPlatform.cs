@@ -31,7 +31,7 @@ public class MovingPlatform : MonoBehaviour
 
         var newPosition = Vector3.Lerp(start, end, pingPong);
 
-        this.transform.localPosition = newPosition;
+        this.transform.position = newPosition;
 
         PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
 

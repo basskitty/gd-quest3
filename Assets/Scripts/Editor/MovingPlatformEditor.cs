@@ -10,13 +10,13 @@ public class MovingPlatformEditor : Editor
 
     private void OnEnable () {
         this.platform = this.target as MovingPlatform;
-        //     this.start = this.serializedObject.FindProperty( "start" );
-        //   this.end = this.serializedObject.FindProperty( "end" );
+        this.start = this.serializedObject.FindProperty( "start" );
+        this.end = this.serializedObject.FindProperty( "end" );
     }
     
     public override void OnInspectorGUI()
     {
-        //base.OnInspectorGUI();
+        base.OnInspectorGUI();
         this.platform.platformSpeed = EditorGUILayout.Slider("Speed", this.platform.platformSpeed, 0.0f, 10.0f);
 
         GUILayout.Label("Debug");
