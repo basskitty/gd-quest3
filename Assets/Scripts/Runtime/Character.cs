@@ -205,9 +205,9 @@ public class Character : MonoBehaviour
     private void OnDrawGizmos ()
     {
         var rayStart = this.transform.position;
-        var rayEnd = this.transform.position + Vector3 .down * this .platformRayDistance;
-        Gizmos .color = Color .red;
-        Gizmos .DrawLine(rayStart, rayEnd);
+        var rayEnd = this.transform.position + Vector3 .down * this.platformRayDistance;
+        Gizmos.color = Color .red;
+        Gizmos.DrawLine(rayStart, rayEnd);
     }
     
     public float GetCurrentHealth() => this.currentHealth ;

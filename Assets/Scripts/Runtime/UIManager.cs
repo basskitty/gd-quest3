@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
         }
         this.hudCanvasGroup.alpha = 1.0f;
         this.gameOverCanvasGroup.alpha = 0.0f;
+        this.isFadingInGameOver = false;
     }
     
     private IEnumerator FadeInVictory()
@@ -99,18 +100,16 @@ public class UIManager : MonoBehaviour
     
     public void Respawn()
     {
-        // Reset stats
         this.statistics.coinCounter = 0;
         this.coinCounterText.text = $" {this.statistics.coinCounter} ";
-
-        // Restore health
+        
         this.character.RestoreHealth();
-
-        // Reposition player
+        
         this.respawnTrigger.Respawn(this.character.GetComponent<CharacterController>());
-
-        // Fade HUD back in
+        
         this.StartCoroutine(this.FadeInHUD());
+        
+        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void QuitGame()
